@@ -11,6 +11,13 @@ def s(n):
 def c2n(n):
     return n(lambda z: z+1, 0)
 
+def n2c(n):
+    def church_nat(f, x):
+        for i in range(n):
+            x = f(x)
+        return x
+    return church_nat
+
 one = s(zero)
 two = s(one)
 three = s(two)
@@ -97,6 +104,40 @@ print(c2n(fst(pair))) # 1
 print(c2n(snd(pair))) # 3
 
 #---------------------------------
+#-- Integer :: (Pair of Nat)
+
+def c2i(i):
+    return c2n(fst(i)) - c2n(snd(i))
+
+def n2i(n):
+    return con(n, zero)
+
+def add_i(i, j):
+    return con(add(fst(i), fst(j)), add(snd(i), snd(j)))
+
+def minus(i, j):
+    return con(add(fst(i), snd(j)), add(snd(i), fst(j)))
+
+def mult_i(i, j):
+    return con(add(mult(fst(i), fst(j)),
+                   mult(snd(i), snd(j))),
+               add(mult(fst(i), snd(j)),
+                   mult(snd(i), fst(j))))
+
+n_one_ = minus(n2i(zero), n2i(one))
+n_one = con(two, three)
+n_two = add_i(n_one_, n_one)
+n_three = add_i(n_one, n_two)
+n_six = mult_i(n_three, n2i(two))
+
+print(c2i(n_one_)) # -1
+print(c2i(n_one)) # -1
+print(c2i(n_two)) # -2
+print(c2i(mult_i(n_three, n_two))) # 6
+print(c2i(n_six)) # -6
+
+
+#---------------------------------
 #-- List :: (Fold)
 # from https://stackoverflow.com/a/9752426
 
@@ -105,11 +146,12 @@ empty = lambda f, b: b
 def cons(a, ls):
     return lambda f,b: ls(f,f(b,a))
 
+def push_back(ls, x):
+    ls.append(x)
+    return ls
+
 def c2l(ls):
-    def f(b, a):
-        b.append(a)
-        return b
-    return ls(f, [])
+    return ls(push_back, [])
 
 def printNatList(ls):
     print(list(map(c2n, c2l(ls))))
@@ -143,39 +185,6 @@ def tail(ls):
     , con(false,empty))))
 
 printNatList(tail(ls3)) # [3, 2, 2, 3, 1]
-
-#---------------------------------
-#-- Integer :: (Pair of Nat)
-
-def c2i(i):
-    return c2n(fst(i)) - c2n(snd(i))
-
-def n2i(n):
-    return con(n, zero)
-
-def add_i(i, j):
-    return con(add(fst(i), fst(j)), add(snd(i), snd(j)))
-
-def minus(i, j):
-    return con(add(fst(i), snd(j)), add(snd(i), fst(j)))
-
-def mult_i(i, j):
-    return con(add(mult(fst(i), fst(j)),
-                   mult(snd(i), snd(j))),
-               add(mult(fst(i), snd(j)),
-                   mult(snd(i), fst(j))))
-
-n_one_ = minus(n2i(zero), n2i(one))
-n_one = con(two, three)
-n_two = add_i(n_one_, n_one)
-n_three = add_i(n_one, n_two)
-n_six = mult_i(n_three, n2i(two))
-
-print(c2i(n_one_)) # -1
-print(c2i(n_one)) # -1
-print(c2i(n_two)) # -2
-print(c2i(mult_i(n_three, n_two))) # 6
-print(c2i(n_six)) # -6
 
 #---------------------------------
 #-- Recursion :: (Y combinator)
