@@ -19,17 +19,13 @@ def s(n):
 
 
 def add(n, m):
-    return lambda f, x : n(f,m(f,x))
+    pass
 
 def mult(n, m):
-    return lambda f, x: n(curry2(m)(f), x)
+    pass
 
 def exp(n, m):
-    return lambda f, x: m(curry2(n),f)(x)
+    pass
 
 def n2c(n):
-    def church_nat(f, x):
-        for i in range(n):
-            x = f(x)
-        return x
-    return church_nat
+    pass
