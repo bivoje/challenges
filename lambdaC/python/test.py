@@ -2,7 +2,7 @@
 # python3 -m unittest -v 
 # python3 -m unittest.TestNaturaln2c -v 
 
-from sol import *
+from problem import *
 
 import unittest
 from random import *
