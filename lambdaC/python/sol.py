@@ -5,6 +5,7 @@ def curry2(f):
 def uncurry2(f):
     return lambda x, y: f(x)(y)
 
+
 #---------------------------------
 #-- Natural numbers :: (Iteration)
 
@@ -33,3 +34,38 @@ def n2c(n):
             x = f(x)
         return x
     return church_nat
+
+
+#---------------------------------
+#-- Boolean :: (Selection)
+
+def c2b(b):
+    return b(True,False)
+
+def b2c(b):
+    return true if b else false
+
+def b2s(b):
+    return "T" if b else "F"
+
+def true(x, y):
+    return x
+
+def false(x, y):
+    return y
+
+
+def neg(b):
+    return lambda x,y: b(y,x)
+
+def conj(b1, b2):
+    return lambda x,y: b1(b2(x,y),y)
+
+def disj(b1, b2):
+    return lambda x,y: b1(x,b2(x,y))
+
+def xand(b1, b2):
+    return lambda x,y: b1(b2(x,y),b2(y,x))
+
+def xorr(b1, b2):
+    return lambda x,y: b1(b2(y,x),b2(x,y))

@@ -1,14 +1,28 @@
 
-# python3 -m unittest -v 
-# python3 -m unittest.TestNaturaln2c -v 
+# python3 -c "from test import *; run(naturalTests)"
+# naturalTests
+# booleanTests
+# allTests
 
-from problem import *
+from sol import *
 
 import unittest
 from random import *
 import sys
 
+
 sys.setrecursionlimit(4000)
+
+def load_all(*tcs):
+  ret = unittest.TestSuite()
+  for tc in tcs:
+    ts = unittest.defaultTestLoader.loadTestsFromTestCase(tc)
+    ret.addTests(ts)
+  return ret
+
+def run(suite):
+  runner.run(suite)
+
 
 class TestNatural_n2c(unittest.TestCase):
 
@@ -128,3 +142,44 @@ class TestNatural_exp(unittest.TestCase):
     for a in range(14):
       b = 14 - a
       self.assertEqual(c2n(exp(n2c(a),n2c(b))), a**b)
+
+naturalTests = load_all(TestNatural_n2c, TestNatural_add, TestNatural_mult, TestNatural_exp)
+
+
+class TestBoolean(unittest.TestCase):
+
+  def go_test(self, op, answer):
+    self.assertEqual(c2b(op(true,  true )), answer[0]==1)
+    self.assertEqual(c2b(op(true,  false)), answer[1]==1)
+    self.assertEqual(c2b(op(false, true )), answer[2]==1)
+    self.assertEqual(c2b(op(false, false)), answer[3]==1)
+
+class TestBoolean_neg(unittest.TestCase):
+
+  def test_neg(self):
+    self.assertEqual(c2b(neg(true)), False)
+    self.assertEqual(c2b(neg(false)), True)
+
+class TestBoolean_conj(TestBoolean):
+  def test(self):
+    self.go_test(conj, [1, 0, 0, 0])
+
+class TestBoolean_disj(TestBoolean):
+  def test(self):
+    self.go_test(disj, [1, 1, 1, 0])
+
+class TestBoolean_xand(TestBoolean):
+  def test(self):
+    self.go_test(xand, [1, 0, 0, 1])
+
+class TestBoolean_xor(TestBoolean):
+  def test(self):
+    self.go_test(xorr, [0, 1, 1, 0])
+
+booleanTests = load_all(TestBoolean_neg, TestBoolean_conj, TestBoolean_disj, TestBoolean_xand, TestBoolean_xor)
+
+allTests = unittest.TestSuite()
+allTests.addTests(naturalTests)
+allTests.addTests(booleanTests)
+
+runner = unittest.TextTestRunner(verbosity=2, failfast=True)

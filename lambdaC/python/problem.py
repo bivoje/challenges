@@ -29,3 +29,38 @@ def exp(n, m):
 
 def n2c(n):
     pass
+
+
+#---------------------------------
+#-- Boolean :: (Selection)
+
+def c2b(b):
+    return b(True,False)
+
+def b2c(b):
+    return true if b else false
+
+def b2s(b):
+    return "T" if b else "F"
+
+def true(x, y):
+    return x
+
+def false(x, y):
+    return y
+
+
+def neg(b):
+    pass
+
+def conj(b1, b2):
+    pass
+
+def disj(b1, b2):
+    pass
+
+def xand(b1, b2):
+    pass
+
+def xorr(b1, b2):
+    pass
