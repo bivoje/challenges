@@ -5,6 +5,13 @@ def curry2(f):
 def uncurry2(f):
     return lambda x, y: f(x)(y)
 
+def identity(x):
+    return x
+
+def const(x):
+    return lambda y: x
+
+
 #---------------------------------
 #-- Natural numbers :: (Iteration)
 
@@ -14,8 +21,9 @@ def c2n(n):
 def zero(f, x):
     return x
 
-def s(n):
+def succ(n):
     return lambda f, x : f(n(f,x))
+s = succ
 
 
 def add(n, m):
@@ -28,6 +36,17 @@ def exp(n, m):
     pass
 
 def n2c(n):
+    pass
+
+
+#---------------------------------
+#-- Natural numbers - sub <<optional>>
+
+def nat_minus(a, b):
+    return 0 if a < b else a - b
+
+
+def sub(n, m):
     pass
 
 

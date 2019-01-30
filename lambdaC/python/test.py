@@ -143,7 +143,50 @@ class TestNatural_exp(unittest.TestCase):
       b = 14 - a
       self.assertEqual(c2n(exp(n2c(a),n2c(b))), a**b)
 
-naturalTests = load_all(TestNatural_n2c, TestNatural_add, TestNatural_mult, TestNatural_exp)
+naturalTestsBasic = load_all(TestNatural_n2c, TestNatural_add, TestNatural_mult, TestNatural_exp)
+
+
+class TestNatural_sub(unittest.TestCase):
+
+  def test_sub_manual(self):
+    self.assertEqual(c2n(sub(zero,    zero   )), 0)
+    self.assertEqual(c2n(sub(s(zero), zero   )), 1)
+    self.assertEqual(c2n(sub(zero,    s(zero))), 0)
+    self.assertEqual(c2n(sub(s(zero), s(zero))), 0)
+
+  def test_sub_0_left(self):
+    for _ in range(100):
+      b = randint(0, 1000)
+      self.assertEqual(c2n(sub(zero,n2c(b))), 0)
+
+  def test_sub_0_right(self):
+    for _ in range(100):
+      a = randint(0, 1000)
+      self.assertEqual(c2n(sub(n2c(a),zero)), a)
+
+  def test_sub_sub_inv(self):
+    for _ in range(20):
+      a = randint(0, 1000)
+      b = randint(0, 1000)
+      aa = n2c(a)
+      bb = n2c(b)
+      self.assertEqual(c2n(sub(add(aa,bb), bb)), a)
+
+  def test_sub_sub_max(self):
+    for _ in range(20):
+      a = randint(0, 1000)
+      b = randint(0, 1000)
+      aa = n2c(a)
+      bb = n2c(b)
+      self.assertEqual(c2n(add(sub(aa,bb), bb)), max(a,b))
+
+  def test_sub_small(self):
+    for _ in range(20):
+      a = randint(0, 1000)
+      b = randint(0, 1000)
+      self.assertEqual(c2n(sub(n2c(a),n2c(b))), nat_minus(a,b))
+
+naturalTests = load_all(TestNatural_n2c, TestNatural_add, TestNatural_mult, TestNatural_exp, TestNatural_sub)
 
 
 class TestBoolean(unittest.TestCase):
