@@ -36,6 +36,19 @@ def n2c(n):
     return church_nat
 
 
+def identity(x):
+  return x
+
+def const(x):
+  return lambda y: x
+
+def pred(n):
+  return lambda f, x: curry2(n)(lambda g: lambda h: h(g(f)))(const(x))(identity)
+
+def sub(n, m):
+  return m(pred, n)
+
+
 #---------------------------------
 #-- Boolean :: (Selection)
 
